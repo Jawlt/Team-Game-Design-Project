@@ -14,6 +14,11 @@ public class WaterBoat : MonoBehaviour
     public float MaxSpeed = 10f;
     public float Drag = 0.1f;
 
+    // new public variables for camera configuration
+    public float CameraHeight = 2f;
+    public float CameraDistance = 8f;
+    public float CameraLookAheadDistance = 6f;
+
     // used Components
     protected Rigidbody Rigidbody;
     protected Quaternion StartRotation;
@@ -49,7 +54,7 @@ public class WaterBoat : MonoBehaviour
         // compute vectors
         var forward = Vector3.Scale(new Vector3(1, 0, 1), transform.forward);
 
-        // forward/backward poewr
+        // forward/backward power
         if (Input.GetKey(KeyCode.W))
             PhysicsHelper.ApplyForceToReachVelocity(Rigidbody, forward * MaxSpeed, Power);
         if (Input.GetKey(KeyCode.S))
@@ -64,7 +69,7 @@ public class WaterBoat : MonoBehaviour
             else
                 ParticleSystem.Stop();
         }
-        
+
         // Determine if the boat is moving forward using a dot product
         bool movingForward = Vector3.Dot(transform.forward, Rigidbody.velocity) >= 0;
         // Set target direction based on current movement (forward or backward)
@@ -82,9 +87,8 @@ public class WaterBoat : MonoBehaviour
             Rigidbody.angularVelocity = Vector3.Lerp(Rigidbody.angularVelocity, Vector3.zero, Time.fixedDeltaTime * angularDampFactor);
         }
 
-        //camera position
-        Camera.transform.LookAt(transform.position + transform.forward * 6f + transform.up * 2f);
-        Camera.transform.position = Vector3.SmoothDamp(Camera.transform.position, transform.position + transform.forward * -8f + transform.up * 2f, ref CamVel, 0.05f);
+        //camera position with adjustable height and distance
+        Camera.transform.LookAt(transform.position + transform.forward * CameraLookAheadDistance + transform.up * CameraHeight);
+        Camera.transform.position = Vector3.SmoothDamp(Camera.transform.position, transform.position + transform.forward * -CameraDistance + transform.up * CameraHeight, ref CamVel, 0.05f);
     }
-
 }

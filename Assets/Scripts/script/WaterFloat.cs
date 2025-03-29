@@ -80,7 +80,7 @@ public class WaterFloat : MonoBehaviour
         if (WaterLine > Center.y)
         {
             Rigidbody.drag = WaterDrag;
-     
+
             if (AttachToSurface)
             {
                 // attach to water surface
