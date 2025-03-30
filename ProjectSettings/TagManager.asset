@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Slot
   - FishingArea
+  - Boat
   layers:
   - Default
   - TransparentFX
