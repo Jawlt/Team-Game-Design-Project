@@ -2,34 +2,37 @@ using UnityEngine;
 
 public class BoatEntry : MonoBehaviour
 {
-    // Assign these in the Inspector
-    public GameObject player;         // Reference to the Player GameObject
-    public MouseMovement playerMouse; // Reference to the Player's MouseMovement script
-    public GameObject boat;           // Reference to the Boat GameObject
+    // Assign these in the Inspector:
+    public GameObject player;            // The Player GameObject
+    public MouseMovement playerMouse;    // The player's MouseMovement component
+    public PlayerMovement playerMovement; // The player's PlayerMovement component
+    public GameObject boat;              // The Boat GameObject (with the WaterBoat script)
 
     private bool isPlayerNearby = false;
 
+    // Detect when the player enters the trigger area
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             isPlayerNearby = true;
-            // Optionally display a UI prompt (e.g., "Press E to enter the boat")
+            // Optionally, display a UI prompt (e.g., "Press E to enter the boat")
         }
     }
 
+    // Detect when the player leaves the trigger area
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             isPlayerNearby = false;
-            // Hide the UI prompt if displayed
+            // Optionally, hide the UI prompt
         }
     }
 
+    // Check for input when the player is in the trigger
     void Update()
     {
-        // When the player is in range and presses E, switch control
         if (isPlayerNearby && Input.GetKeyDown(KeyCode.E))
         {
             EnterBoat();
@@ -38,17 +41,25 @@ public class BoatEntry : MonoBehaviour
 
     void EnterBoat()
     {
-        // Disable player's mouse movement (or other player control scripts)
+        // Disable player's control scripts
         if (playerMouse != null)
             playerMouse.enabled = false;
+        if (playerMovement != null)
+            playerMovement.enabled = false;
 
-        // Enable the boat's control script (WaterBoat)
+        // Disable the CharacterController to prevent it from interfering with boat physics
+        CharacterController controller = player.GetComponent<CharacterController>();
+        if (controller != null)
+            controller.enabled = false;
+
+        // Enable boat control
         WaterBoat waterBoat = boat.GetComponent<WaterBoat>();
         if (waterBoat != null)
             waterBoat.enabled = true;
 
-        Debug.Log("Player has entered the boat! Boat control is now active.");
+        // Re-parent the player to the boat so they move together.
+        player.transform.SetParent(boat.transform);
 
-        // Optionally, you can also parent the camera to the boat or reassign its target here.
+        Debug.Log("Player has entered the boat and is now parented to the boat.");
     }
 }
