@@ -382,7 +382,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4037929066868690517}
   - component: {fileID: 1211729141784173285}
-  - component: {fileID: 572462786443489793}
   m_Layer: 0
   m_Name: FishingSystem
   m_TagString: Untagged
@@ -430,26 +429,6 @@ MonoBehaviour:
   oceanFishList: []
   isThereABite: 0
   minigame: {fileID: 7319022735355503296}
-  fishMovement: {fileID: 0}
---- !u!114 &572462786443489793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4508246740067232058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7aae70b4fc53564abbde352a08789d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fishingRodPrefab: {fileID: 0}
-  toolHolder: {fileID: 0}
-  lakeFishList: []
-  riverFishList: []
-  oceanFishList: []
-  isThereABite: 0
-  minigame: {fileID: 0}
   fishMovement: {fileID: 0}
 --- !u!1 &4666270683819216298
 GameObject:
