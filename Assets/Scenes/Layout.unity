@@ -1579,6 +1579,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1145794505}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1265342828 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8581149490738801781, guid: 0bbc5f16011540845850f53c39246766,
+    type: 3}
+  m_PrefabInstance: {fileID: 1394970474}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1274964121
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2356,7 +2362,7 @@ PrefabInstance:
         type: 3}
       propertyPath: toolHolder
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1265342828}
     - target: {fileID: 1211729141784173285, guid: 853e5718d8cc1c64a8eb2b36270a0ec8,
         type: 3}
       propertyPath: lakeFishList.Array.size
@@ -2429,7 +2435,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: FishingSystem
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 572462786443489793, guid: 853e5718d8cc1c64a8eb2b36270a0ec8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
