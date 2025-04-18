@@ -1171,6 +1171,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 664e31d626eebe440985700367adc01d,
+        type: 3}
+      propertyPath: m_TagString
+      value: Boat
+      objectReference: {fileID: 0}
     - target: {fileID: 1204531305260519914, guid: 664e31d626eebe440985700367adc01d,
         type: 3}
       propertyPath: m_Materials.Array.size
