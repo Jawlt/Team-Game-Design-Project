@@ -429,7 +429,7 @@ MonoBehaviour:
   oceanFishList: []
   isThereABite: 0
   minigame: {fileID: 7319022735355503296}
-  fishMovement: {fileID: 0}
+  fishMovement: {fileID: 1986991252083938050}
 --- !u!1 &4666270683819216298
 GameObject:
   m_ObjectHideFlags: 0
