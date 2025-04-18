@@ -2435,8 +2435,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: FishingSystem
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 572462786443489793, guid: 853e5718d8cc1c64a8eb2b36270a0ec8, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
