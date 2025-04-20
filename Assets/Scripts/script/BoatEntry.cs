@@ -2,64 +2,154 @@ using UnityEngine;
 
 public class BoatEntry : MonoBehaviour
 {
-    // Assign these in the Inspector:
-    public GameObject player;            // The Player GameObject
-    public MouseMovement playerMouse;    // The player's MouseMovement component
-    public PlayerMovement playerMovement; // The player's PlayerMovement component
-    public GameObject boat;              // The Boat GameObject (with the WaterBoat script)
+    [Header("Player Settings (Assign in Inspector)")]
+    public GameObject player;               // The Player GameObject
+    public MouseMovement playerMouse;       // The player's MouseMovement component
+    public PlayerMovement playerMovement;   // The player's PlayerMovement component
+    public GameObject boat;                 // The Boat GameObject (with the WaterBoat script)
+
+    [Header("Exit Settings")]
+    public Vector3 exitOffset = new Vector3(0, 2f, 0);  // Offset to place player when exiting
 
     private bool isPlayerNearby = false;
+    private bool isInBoat = false;
 
-    // Detect when the player enters the trigger area
+    // Cached components
+    private Renderer[] playerRenderers;
+    private Collider[] playerColliders;
+    private WaterBoat waterBoat;
+    private CharacterController controller;
+    private Rigidbody rb;
+    private RigidbodyConstraints originalConstraints;
+
+    // Original transforms for reset
+    private Quaternion originalPlayerRotation;
+    private Transform cameraTransform;
+    private Transform originalCameraParent;
+    private Vector3 originalCameraLocalPosition;
+    private Quaternion originalCameraLocalRotation;
+
+    void Start()
+    {
+        // Cache player components
+        playerRenderers = player.GetComponentsInChildren<Renderer>();
+        playerColliders = player.GetComponentsInChildren<Collider>();
+        controller = player.GetComponent<CharacterController>();
+        rb = player.GetComponent<Rigidbody>();
+        if (rb != null)
+            originalConstraints = rb.constraints;
+
+        // Save original player rotation
+        originalPlayerRotation = player.transform.rotation;
+
+        // Cache camera transform and original parent/local transform
+        cameraTransform = Camera.main.transform;
+        originalCameraParent = cameraTransform.parent;
+        originalCameraLocalPosition = cameraTransform.localPosition;
+        originalCameraLocalRotation = cameraTransform.localRotation;
+
+        // Cache and disable boat control
+        waterBoat = boat.GetComponent<WaterBoat>();
+        if (waterBoat != null)
+            waterBoat.enabled = false;
+    }
+
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (!isInBoat && other.CompareTag("Player"))
         {
             isPlayerNearby = true;
-            // Optionally, display a UI prompt (e.g., "Press E to enter the boat")
+            // TODO: Show UI prompt "Press E to enter boat"
         }
     }
 
-    // Detect when the player leaves the trigger area
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (!isInBoat && other.CompareTag("Player"))
         {
             isPlayerNearby = false;
-            // Optionally, hide the UI prompt
+            // TODO: Hide UI prompt
         }
     }
 
-    // Check for input when the player is in the trigger
     void Update()
     {
-        if (isPlayerNearby && Input.GetKeyDown(KeyCode.E))
+        if (!isInBoat)
         {
-            EnterBoat();
+            if (isPlayerNearby && Input.GetKeyDown(KeyCode.E))
+                EnterBoat();
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+                ExitBoat();
         }
     }
 
     void EnterBoat()
     {
-        // Disable player's control scripts
-        if (playerMouse != null)
-            playerMouse.enabled = false;
-        if (playerMovement != null)
-            playerMovement.enabled = false;
+        isInBoat = true;
+        isPlayerNearby = false;
 
-        // Disable the CharacterController to prevent it from interfering with boat physics
-        CharacterController controller = player.GetComponent<CharacterController>();
-        if (controller != null)
-            controller.enabled = false;
+        // Disable player controls
+        if (playerMouse) playerMouse.enabled = false;
+        if (playerMovement) playerMovement.enabled = false;
 
-        // Enable boat control
-        WaterBoat waterBoat = boat.GetComponent<WaterBoat>();
-        if (waterBoat != null)
-            waterBoat.enabled = true;
+        // Disable CharacterController and physics
+        if (controller) controller.enabled = false;
+        if (rb)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
 
-        // Re-parent the player to the boat so they move together.
+        // Hide player
+        foreach (var col in playerColliders) col.enabled = false;
+        foreach (var rend in playerRenderers) rend.enabled = false;
+
+        // Parent player to boat and enable boat controls
         player.transform.SetParent(boat.transform);
+        if (waterBoat) waterBoat.enabled = true;
 
-        Debug.Log("Player has entered the boat and is now parented to the boat.");
+        Debug.Log("Player entered boat");
+    }
+
+    void ExitBoat()
+    {
+        isInBoat = false;
+
+        // Unparent player and position atop boat
+        player.transform.SetParent(null);
+        player.transform.position = boat.transform.position + exitOffset;
+
+        // Reset player rotation to original (upright)
+        player.transform.rotation = originalPlayerRotation;
+
+        // Restore camera parent and local transform
+        cameraTransform.SetParent(originalCameraParent);
+        cameraTransform.localPosition = originalCameraLocalPosition;
+        cameraTransform.localRotation = originalCameraLocalRotation;
+
+        // Disable boat controls
+        if (waterBoat) waterBoat.enabled = false;
+
+        // Restore physics
+        if (rb)
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.constraints = originalConstraints;
+        }
+
+        // Show player
+        foreach (var col in playerColliders) col.enabled = true;
+        foreach (var rend in playerRenderers) rend.enabled = true;
+
+        // Restore player controls
+        if (playerMouse) playerMouse.enabled = true;
+        if (playerMovement) playerMovement.enabled = true;
+        if (controller) controller.enabled = true;
+
+        Debug.Log("Player exited boat, rotation and camera reset");
     }
 }
