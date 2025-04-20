@@ -18,3 +18,4 @@ MonoBehaviour:
   probability: 20
   fishDifficulty: 1
   fishCost: 50
+  baseXP: 25
