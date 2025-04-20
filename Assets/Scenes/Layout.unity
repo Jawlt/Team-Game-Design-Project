@@ -463,9 +463,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 0.305
+  m_audioClip: {fileID: 8300000, guid: df7087e4d8a8bb546bc08ce68632903f, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -509,7 +509,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2776,8 +2776,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -5, y: 0}
-  m_SizeDelta: {x: -20, y: 0}
+  m_AnchoredPosition: {x: 1.6113968, y: 0}
+  m_SizeDelta: {x: -6.7772, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &586512316
 GameObject:
@@ -2845,7 +2845,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &592980757
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2858,13 +2858,13 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 9fcd727ac0a07a04ca442df5195c4f3b, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.324
+  m_Volume: 0.085
   m_Pitch: 1
   Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 126
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -3311,7 +3311,7 @@ GameObject:
   - component: {fileID: 689325046}
   m_Layer: 6
   m_Name: Main Islands
-  m_TagString: Untagged
+  m_TagString: Grass
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -10832,6 +10832,11 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 369189136583583503, guid: 0bbc5f16011540845850f53c39246766,
+        type: 3}
+      propertyPath: m_Height
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1280179761962166781, guid: 0bbc5f16011540845850f53c39246766,
         type: 3}
       propertyPath: m_Name
@@ -10841,6 +10846,21 @@ PrefabInstance:
         type: 3}
       propertyPath: gravity
       value: -9.81
+      objectReference: {fileID: 0}
+    - target: {fileID: 3530987206353347467, guid: 0bbc5f16011540845850f53c39246766,
+        type: 3}
+      propertyPath: footstepClip
+      value: 
+      objectReference: {fileID: 8300000, guid: df7087e4d8a8bb546bc08ce68632903f, type: 3}
+    - target: {fileID: 3530987206353347467, guid: 0bbc5f16011540845850f53c39246766,
+        type: 3}
+      propertyPath: stepInterval
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3530987206353347467, guid: 0bbc5f16011540845850f53c39246766,
+        type: 3}
+      propertyPath: groundDistance
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 3659333085172041270, guid: 0bbc5f16011540845850f53c39246766,
         type: 3}
@@ -10887,6 +10907,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.76152
       objectReference: {fileID: 0}
+    - target: {fileID: 4545901997244142684, guid: 0bbc5f16011540845850f53c39246766,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.495
+      objectReference: {fileID: 0}
     - target: {fileID: 6707006419759995920, guid: 0bbc5f16011540845850f53c39246766,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -10910,7 +10935,7 @@ PrefabInstance:
     - target: {fileID: 6707006419759995920, guid: 0bbc5f16011540845850f53c39246766,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.22
+      value: 12.912
       objectReference: {fileID: 0}
     - target: {fileID: 6707006419759995920, guid: 0bbc5f16011540845850f53c39246766,
         type: 3}

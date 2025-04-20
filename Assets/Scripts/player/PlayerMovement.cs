@@ -18,6 +18,17 @@ public class PlayerMovement : MonoBehaviour
 
     bool isGrounded;
 
+    [Header("Footsteps")]
+    private AudioSource audioSource;   // Assign your AudioSource here
+    public AudioClip footstepClip;    // Or assign in Inspector
+    public float stepInterval = 0.5f; // Seconds between steps
+    private float stepTimer = 0f;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = footstepClip;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -36,6 +47,31 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
 
         controller.Move(move * speed * Time.deltaTime);
+
+        // --- Footstep Logic ---
+        bool isMoving = move.magnitude > 0.1f;
+        if (isGrounded && isMoving)
+        {
+            stepTimer -= Time.deltaTime;
+            if (stepTimer <= 0f)
+            {
+                // Raycast down to check for “Grass” tag
+                RaycastHit hit;
+                if (Physics.Raycast(groundCheck.position, Vector3.down, out hit, groundDistance + 0.1f, groundMask))
+                {
+                    if (hit.collider.CompareTag("Grass"))
+                    {
+                        audioSource.PlayOneShot(footstepClip);
+                    }
+                }
+                stepTimer = stepInterval;
+            }
+        }
+        else
+        {
+            // reset timer when not moving or airborne
+            stepTimer = 0f;
+        }
 
         //jump if player is on the ground
         if (Input.GetButtonDown("Jump") && isGrounded)
