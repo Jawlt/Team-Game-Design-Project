@@ -10,21 +10,22 @@ public class MerchantUI : MonoBehaviour
     public MerchantItem[] itemsForSale;
 
     [Header("Interaction Settings")]
-    public float interactDistance = 3f;
     public KeyCode interactKey = KeyCode.E;
-    public Transform playerCamera;
     public FishDatabase fishDatabase;
 
     [Header("Unlockable Objects")]
-    public GameObject boatObject; // Drag your Boat GameObject here
+    public GameObject boatObject; // Assign in inspector
 
     [System.Serializable]
     public class HazardBinding
     {
-        public string itemName;              // e.g., "Island1"
+        public string itemName;
         public GameObject hazardToRemove;
     }
     public HazardBinding[] hazardBindings;
+
+    private bool playerNearby = false;
+
     private GameObject GetHazardForItem(string itemName)
     {
         foreach (var binding in hazardBindings)
@@ -42,9 +43,9 @@ public class MerchantUI : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(interactKey) && PlayerLookingAtMe())
+        if (playerNearby && Input.GetKeyDown(interactKey))
         {
-            ToggleShop(true);
+            ToggleShop(!panel.activeSelf); // Toggle open/close
         }
 
         if (panel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
@@ -53,19 +54,33 @@ public class MerchantUI : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerNearby = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerNearby = false;
+            ToggleShop(false); // close panel on exit
+        }
+    }
+
     void PopulateBuyUI()
     {
         foreach (MerchantItem item in itemsForSale)
         {
-            // Skip if player already owns this item
-            if (ItemAlreadyOwned(item))
-                continue;
+            if (ItemAlreadyOwned(item)) continue;
 
             GameObject btnObj = Instantiate(buyButtonPrefab, buyItemParent);
             btnObj.transform.GetChild(0).GetComponent<Image>().sprite = item.icon;
             btnObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = item.itemName + "\n$ " + item.cost;
 
-            // Store item reference for hiding later
             Button button = btnObj.GetComponent<Button>();
             button.onClick.AddListener(() => BuyAndHide(item, btnObj));
         }
@@ -86,17 +101,8 @@ public class MerchantUI : MonoBehaviour
 
     private void BuyAndHide(MerchantItem item, GameObject buttonObj)
     {
-        if (!PlayerData.Instance.CanAfford(item.cost))
-        {
-            Debug.Log("Not enough cash.");
-            return;
-        }
-
-        if (ItemAlreadyOwned(item))
-        {
-            Debug.Log($"{item.itemName} already unlocked.");
-            return;
-        }
+        if (!PlayerData.Instance.CanAfford(item.cost)) return;
+        if (ItemAlreadyOwned(item)) return;
 
         PlayerData.Instance.SpendCash(item.cost);
 
@@ -104,38 +110,16 @@ public class MerchantUI : MonoBehaviour
         {
             case MerchantItem.ItemType.Boat:
                 PlayerData.Instance.hasBoat = true;
-                Debug.Log("Boat unlocked!");
-
-                if (boatObject != null)
-                {
-                    boatObject.SetActive(true);
-                    Debug.Log("Boat object activated.");
-                }
-                else
-                {
-                    Debug.LogWarning("No boatObject assigned in MerchantUI.");
-                }
+                if (boatObject) boatObject.SetActive(true);
                 break;
 
             case MerchantItem.ItemType.IslandUnlock:
                 PlayerData.Instance.unlockedIslands.Add(item.itemName);
-                Debug.Log(item.itemName + " unlocked!");
-
-                // Remove the hazard associated with this island
                 GameObject hazard = GetHazardForItem(item.itemName);
-                if (hazard != null)
-                {
-                    Destroy(hazard);
-                    Debug.Log($"Removed hazard for {item.itemName}");
-                }
-                else
-                {
-                    Debug.LogWarning($"No hazard bound for: {item.itemName}");
-                }
+                if (hazard) Destroy(hazard);
                 break;
         }
 
-        // Hide the button after successful purchase
         buttonObj.SetActive(false);
     }
 
@@ -151,16 +135,7 @@ public class MerchantUI : MonoBehaviour
         foreach (string itemName in InventorySystem.Instance.itemList)
         {
             FishData fish = fishDatabase.GetFishByName(itemName);
-
-            if (fish != null)
-            {
-                Debug.Log($"Selling {fish.fishName} for ${fish.fishCost}");
-                totalEarned += fish.fishCost;
-            }
-            else
-            {
-                Debug.LogWarning($"Fish not found in database: {itemName}");
-            }
+            if (fish != null) totalEarned += fish.fishCost;
         }
 
         InventorySystem.Instance.itemList.Clear();
@@ -168,35 +143,18 @@ public class MerchantUI : MonoBehaviour
         foreach (GameObject slot in InventorySystem.Instance.slotList)
         {
             if (slot.transform.childCount > 0)
-            {
                 Destroy(slot.transform.GetChild(0).gameObject);
-            }
         }
 
         PlayerData.Instance.AddCash(totalEarned);
         Debug.Log("Sold all for $" + totalEarned);
     }
 
-
     private void ToggleShop(bool open)
     {
         panel.SetActive(open);
-
         Time.timeScale = open ? 0f : 1f;
         Cursor.lockState = open ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = open;
-    }
-
-    private bool PlayerLookingAtMe()
-    {
-        if (playerCamera == null) return false;
-
-        Ray ray = new Ray(playerCamera.position, playerCamera.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
-        {
-            return hit.transform == transform;
-        }
-
-        return false;
     }
 }

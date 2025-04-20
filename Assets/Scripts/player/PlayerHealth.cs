@@ -7,30 +7,32 @@ public class PlayerHealth : MonoBehaviour
     public float gasDamagePerSecond = 5f;
 
     [Header("Respawn Settings")]
-    public Transform spawnPoint; // Assign in Inspector
+    public Transform spawnPoint;
+
+    [Header("Audio Settings")]
+    public AudioClip poisonClip;
+    public AudioClip deathClip;
+    private AudioSource audioSource;
 
     [Header("Runtime (read‐only)")]
     [SerializeField]
     private float currentHealth;
 
-    [Header("Audio Settings")]
-    public AudioClip poisonClip;             
-    private AudioSource audioSource;        // Source to play the poison sound
-
     private bool inGas = false;
     private bool isDead = false;
-    private AudioSource poisonAudio;
-
 
     void Start()
     {
         currentHealth = maxHealth;
         isDead = false;
-        // Setup audio source
+
         audioSource = GetComponent<AudioSource>();
-        audioSource.clip = poisonClip;
-        audioSource.loop = true; // keep looping while in gas
-        audioSource.playOnAwake = false;
+        if (audioSource != null)
+        {
+            audioSource.clip = poisonClip;
+            audioSource.loop = true;
+            audioSource.playOnAwake = false;
+        }
     }
 
     void Update()
@@ -52,8 +54,7 @@ public class PlayerHealth : MonoBehaviour
         if (other.CompareTag("GasMist"))
         {
             inGas = true;
-            // Play the looping poison sound
-            if (audioSource && !audioSource.isPlaying)
+            if (audioSource && poisonClip && !audioSource.isPlaying)
                 audioSource.Play();
         }
     }
@@ -63,8 +64,7 @@ public class PlayerHealth : MonoBehaviour
         if (other.CompareTag("GasMist"))
         {
             inGas = false;
-            // Stop the sound when you leave
-            if (audioSource != null && audioSource.isPlaying)
+            if (audioSource && audioSource.isPlaying)
                 audioSource.Stop();
         }
     }
@@ -75,6 +75,14 @@ public class PlayerHealth : MonoBehaviour
         isDead = true;
         inGas = false;
 
+        // Stop poison loop
+        if (audioSource && audioSource.isPlaying)
+            audioSource.Stop();
+
+        if (deathClip != null)
+            audioSource.PlayOneShot(deathClip);
+
+        // Move player to spawn
         if (spawnPoint != null)
         {
             Debug.Log("Spawn point found at position: " + spawnPoint.position);
@@ -104,9 +112,5 @@ public class PlayerHealth : MonoBehaviour
         isDead = false;
     }
 
-
-    /// <summary>
-    /// Public getter for current health (e.g., for UI display).
-    /// </summary>
     public float GetCurrentHealth() => currentHealth;
 }

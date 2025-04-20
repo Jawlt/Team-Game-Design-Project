@@ -58,7 +58,7 @@ public class PlayerData : MonoBehaviour
     {
         if (cashTextUI == null) return;
 
-        cashTextUI.text = $"Cash: {cash:N0}";
+        cashTextUI.text = $"{cash:N0}";
         StopAllCoroutines();
         StartCoroutine(FlashColor(isSpending));
     }

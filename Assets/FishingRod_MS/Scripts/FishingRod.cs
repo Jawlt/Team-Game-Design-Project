@@ -14,19 +14,22 @@ public class FishingRod : MonoBehaviour
 
     Animator animator;
     public GameObject baitPrefab;
-    public GameObject endof_of_rope;  // --- > IF USING ROPE
-    public GameObject start_of_rope;   // --- > IF USING ROPE   
-    public GameObject start_of_rod;    // --- > IF USING ROPE   
+    public GameObject endof_of_rope;
+    public GameObject start_of_rope;
+    public GameObject start_of_rod;
 
     Transform baitPosition;
     GameObject baitReference;
 
+    [Header("Audio Clips")]
+    public AudioClip castSound;
+    public AudioClip biteSound;
+    private AudioSource audioSource;
+
     private void OnEnable()
     {
-        // Subscribe to event
         FishingSystem.OnEndFishing += HandleFishingEnd;
 
-        // Reset state
         isEquipped = true;
         isCasted = false;
         isPulling = false;
@@ -41,9 +44,8 @@ public class FishingRod : MonoBehaviour
         Debug.Log("FishingRod enabled → state reset.");
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
-        // Unsubscribe to event
         FishingSystem.OnEndFishing -= HandleFishingEnd;
     }
 
@@ -52,12 +54,14 @@ public class FishingRod : MonoBehaviour
         Destroy(baitReference);
     }
 
-
-
     private void Start()
     {
         animator = GetComponent<Animator>();
         isEquipped = true;
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     private void OnDisable()
@@ -83,7 +87,6 @@ public class FishingRod : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
             {
-
                 if (hit.collider.CompareTag("FishingArea"))
                 {
                     isFishingAvailable = true;
@@ -93,12 +96,16 @@ public class FishingRod : MonoBehaviour
                         Watersource watersource = hit.collider.gameObject.GetComponent<FishingArea>().waterSource;
                         StartCoroutine(CastRod(hit.point, watersource));
                     }
+
+                    if (isCasted && Input.GetMouseButtonDown(1) && FishingSystem.Instance.isThereABite)
+                    {
+                        PullRod();
+                    }
                 }
                 else
                 {
                     isFishingAvailable = false;
                 }
-
             }
             else
             {
@@ -106,7 +113,6 @@ public class FishingRod : MonoBehaviour
             }
         }
 
-        // --- > IF USING ROPE < --- //
         if (isCasted || isPulling)
         {
             if (start_of_rope != null && start_of_rod != null && endof_of_rope != null)
@@ -123,20 +129,16 @@ public class FishingRod : MonoBehaviour
                 Debug.Log("MISSING ROPE REFERENCES");
             }
         }
-
-        if (isCasted && Input.GetMouseButtonDown(1) && FishingSystem.Instance.isThereABite) // player can only pull when there is a bite
-        {
-            PullRod();
-        }
     }
-
 
     IEnumerator CastRod(Vector3 targetPosition, Watersource watersource)
     {
         isCasted = true;
         animator.SetTrigger("Cast");
 
-        // Create a delay between the animation and when the bait appears in the water
+        if (castSound != null)
+            audioSource.PlayOneShot(castSound);
+
         yield return new WaitForSeconds(1f);
 
         GameObject instantiatedBait = Instantiate(baitPrefab);
@@ -145,7 +147,6 @@ public class FishingRod : MonoBehaviour
         baitPosition = instantiatedBait.transform;
         baitReference = instantiatedBait;
 
-        // ---- > Start Fish Bite Logic
         FishingSystem.Instance.StartFishing(watersource);
     }
 
@@ -155,7 +156,9 @@ public class FishingRod : MonoBehaviour
         isCasted = false;
         isPulling = true;
 
-        // ---- > Start Minigame Logic
+        if (biteSound != null)
+            audioSource.PlayOneShot(biteSound);
+
         FishingSystem.Instance.SetHasPulled();
     }
 }

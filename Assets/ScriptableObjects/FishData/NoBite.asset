@@ -16,3 +16,5 @@ MonoBehaviour:
   inventoryItem: {fileID: 0}
   probability: 10
   fishDifficulty: 1
+  fishCost: 0
+  baseXP: 0
