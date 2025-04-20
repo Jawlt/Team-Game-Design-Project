@@ -1783,11 +1783,7 @@ MonoBehaviour:
   healthText: {fileID: 0}
   healthTMP: {fileID: 1071089857}
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
 --- !u!1 &368142779
-=======
---- !u!1 &371378873
->>>>>>> Stashed changes
 =======
 --- !u!1 &371378873
 >>>>>>> Stashed changes
@@ -1799,23 +1795,17 @@ GameObject:
   serializedVersion: 6
   m_Component:
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
   - component: {fileID: 368142780}
   - component: {fileID: 368142782}
   - component: {fileID: 368142781}
   m_Layer: 5
   m_Name: Text (TMP)
 =======
-=======
->>>>>>> Stashed changes
   - component: {fileID: 371378874}
   - component: {fileID: 371378876}
   - component: {fileID: 371378875}
   m_Layer: 5
   m_Name: Boat Exit Text
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
 >>>>>>> Stashed changes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1823,11 +1813,7 @@ GameObject:
   m_StaticEditorFlags: 0
   m_IsActive: 1
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
 --- !u!224 &368142780
-=======
---- !u!224 &371378874
->>>>>>> Stashed changes
 =======
 --- !u!224 &371378874
 >>>>>>> Stashed changes
@@ -1836,7 +1822,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   m_GameObject: {fileID: 368142779}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1853,8 +1838,6 @@ RectTransform:
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &368142781
 =======
-=======
->>>>>>> Stashed changes
   m_GameObject: {fileID: 371378873}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -1869,9 +1852,6 @@ RectTransform:
   m_SizeDelta: {x: 191.0354, y: 49.8748}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &371378875
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
 >>>>>>> Stashed changes
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1879,11 +1859,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
   m_GameObject: {fileID: 368142779}
-=======
-  m_GameObject: {fileID: 371378873}
->>>>>>> Stashed changes
 =======
   m_GameObject: {fileID: 371378873}
 >>>>>>> Stashed changes
@@ -1901,13 +1877,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
   m_text: 'Sell All
 
 '
-=======
-  m_text: Press E to exit boat
->>>>>>> Stashed changes
 =======
   m_text: Press E to exit boat
 >>>>>>> Stashed changes
@@ -1920,13 +1892,8 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
     rgba: 4281479730
   m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-=======
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
->>>>>>> Stashed changes
 =======
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
@@ -1948,13 +1915,8 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
   m_fontSize: 30
   m_fontSizeBase: 30
-=======
-  m_fontSize: 36
-  m_fontSizeBase: 36
->>>>>>> Stashed changes
 =======
   m_fontSize: 36
   m_fontSizeBase: 36
@@ -1964,15 +1926,9 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
-=======
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
->>>>>>> Stashed changes
 =======
   m_fontStyle: 0
   m_HorizontalAlignment: 1
@@ -2006,11 +1962,7 @@ MonoBehaviour:
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
   m_margin: {x: 0, y: 0, z: 0, w: 0}
-=======
-  m_margin: {x: 0, y: 0, z: -176.50745, w: 0}
->>>>>>> Stashed changes
 =======
   m_margin: {x: 0, y: 0, z: -176.50745, w: 0}
 >>>>>>> Stashed changes
@@ -2020,11 +1972,7 @@ MonoBehaviour:
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
 --- !u!222 &368142782
-=======
---- !u!222 &371378876
->>>>>>> Stashed changes
 =======
 --- !u!222 &371378876
 >>>>>>> Stashed changes
@@ -2034,11 +1982,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
   m_GameObject: {fileID: 368142779}
-=======
-  m_GameObject: {fileID: 371378873}
->>>>>>> Stashed changes
 =======
   m_GameObject: {fileID: 371378873}
 >>>>>>> Stashed changes
