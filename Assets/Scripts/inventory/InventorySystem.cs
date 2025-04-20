@@ -58,7 +58,11 @@ public class InventorySystem : MonoBehaviour
         isOpen = !isOpen;
         inventoryScreenUI.SetActive(isOpen);
         crosshairUI.SetActive(!isOpen);
+
         Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = isOpen;
+
+        Time.timeScale = isOpen ? 0f : 1f;
     }
 
     public void AddToInventory(string itemName)

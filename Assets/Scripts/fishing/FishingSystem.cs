@@ -116,6 +116,18 @@ public class FishingSystem : MonoBehaviour
         currentRodInstance = Instantiate(fishingRodPrefab, toolHolder);
     }
 
+    public void EquipRod(GameObject rodPrefab)
+    {
+        if (currentRodInstance != null)
+        {
+            Destroy(currentRodInstance);
+        }
+
+        currentRodInstance = Instantiate(rodPrefab, toolHolder);
+        Debug.Log("Fishing rod equipped.");
+    }
+
+
     private FishData CalculateBite(Watersource watersource)
     {
         List<FishData> availableFish = GetAvailableFish(watersource);

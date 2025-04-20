@@ -8,6 +8,7 @@ TagManager:
   - FishingArea
   - Boat
   - GasMist
+  - FishingRod
   layers:
   - Default
   - TransparentFX
