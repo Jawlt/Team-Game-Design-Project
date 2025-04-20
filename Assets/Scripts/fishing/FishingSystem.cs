@@ -10,8 +10,8 @@ public enum Watersource
 public class FishingSystem : MonoBehaviour
 {
     public static FishingSystem Instance { get; set; }
-    [SerializeField] private GameObject fishingRodPrefab; // Assign your rod prefab in Inspector
-    [SerializeField] private Transform toolHolder;         // Assign your ToolHolder (parent object
+    [SerializeField] private GameObject fishingRodPrefab;
+    [SerializeField] private Transform toolHolder;
     private GameObject currentRodInstance;
     public List<FishData> lakeFishList;
     public List<FishData> riverFishList;
@@ -180,12 +180,28 @@ public class FishingSystem : MonoBehaviour
         {
             InventorySystem.Instance.AddToInventory(fishType.fishName);
             Debug.Log("Fish Caught");
+
+            // Award XP and Bonus Cash
+            PlayerExperience playerXP = FindObjectOfType<PlayerExperience>();
+            if (playerXP != null)
+            {
+                playerXP.GainXP(fishType.baseXP);
+
+                // Optional: Add bonus cash directly here
+                if (playerXP.cashBonusPerCatch > 0)
+                {
+                    PlayerData.Instance.AddCash(playerXP.cashBonusPerCatch);
+                    Debug.Log($"Bonus Cash: +${playerXP.cashBonusPerCatch}");
+                }
+            }
+
             EndFishing();
         }
         else
         {
             Debug.Log("Fish Escaped");
             EndFishing();
+
         }
     }
 }
