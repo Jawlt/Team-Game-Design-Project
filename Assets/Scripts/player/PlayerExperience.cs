@@ -54,7 +54,7 @@ public class PlayerExperience : MonoBehaviour
     {
         currentLevel++;
         currentXP -= xpToNextLevel;
-        xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 1.2f);
+        xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 1.5f);
 
         Debug.Log($"Leveled up to {currentLevel}!");
         levelUpPanel.SetActive(true);
@@ -78,7 +78,7 @@ public class PlayerExperience : MonoBehaviour
                 xpMultiplier += 0.25f;
                 break;
             case UpgradeType.ExtraCash:
-                cashBonusPerCatch += 10;
+                cashBonusPerCatch += 5;
                 break;
         }
 
