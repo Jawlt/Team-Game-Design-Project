@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI; // or TMPro if using TextMeshPro
 
 public class BoatEntry : MonoBehaviour
 {
@@ -7,6 +8,10 @@ public class BoatEntry : MonoBehaviour
     public MouseMovement playerMouse;       // The player's MouseMovement component
     public PlayerMovement playerMovement;   // The player's PlayerMovement component
     public GameObject boat;                 // The Boat GameObject (with the WaterBoat script)
+
+    [Header("UI Prompts (Assign in Inspector)")]
+    public GameObject enterPromptUI;        // The "Press E to enter boat" prompt
+    public GameObject exitPromptUI;         // The "Press E to exit boat" prompt
 
     [Header("Exit Settings")]
     public Vector3 exitOffset = new Vector3(0, 2f, 0);  // Offset to place player when exiting
@@ -42,11 +47,15 @@ public class BoatEntry : MonoBehaviour
         // Save original player rotation
         originalPlayerRotation = player.transform.rotation;
 
-        // Cache camera transform and original parent/local transform
+        // Cache main camera transform and its original parent/local offsets
         cameraTransform = Camera.main.transform;
         originalCameraParent = cameraTransform.parent;
         originalCameraLocalPosition = cameraTransform.localPosition;
         originalCameraLocalRotation = cameraTransform.localRotation;
+
+        // Hide both prompts at start
+        if (enterPromptUI) enterPromptUI.SetActive(false);
+        if (exitPromptUI) exitPromptUI.SetActive(false);
 
         // Cache and disable boat control
         waterBoat = boat.GetComponent<WaterBoat>();
@@ -59,7 +68,7 @@ public class BoatEntry : MonoBehaviour
         if (!isInBoat && other.CompareTag("Player"))
         {
             isPlayerNearby = true;
-            // TODO: Show UI prompt "Press E to enter boat"
+            if (enterPromptUI) enterPromptUI.SetActive(true);
         }
     }
 
@@ -68,8 +77,21 @@ public class BoatEntry : MonoBehaviour
         if (!isInBoat && other.CompareTag("Player"))
         {
             isPlayerNearby = false;
-            // TODO: Hide UI prompt
+            if (enterPromptUI) enterPromptUI.SetActive(false);
         }
+    }
+
+    // Optional: show enter prompt on mouse hover
+    void OnMouseOver()
+    {
+        if (!isInBoat && enterPromptUI)
+            enterPromptUI.SetActive(true);
+    }
+
+    void OnMouseExit()
+    {
+        if (!isInBoat && !isPlayerNearby && enterPromptUI)
+            enterPromptUI.SetActive(false);
     }
 
     void Update()
@@ -81,6 +103,10 @@ public class BoatEntry : MonoBehaviour
         }
         else
         {
+            // Show exit prompt while in boat
+            if (exitPromptUI && !exitPromptUI.activeSelf)
+                exitPromptUI.SetActive(true);
+
             if (Input.GetKeyDown(KeyCode.E))
                 ExitBoat();
         }
@@ -90,6 +116,10 @@ public class BoatEntry : MonoBehaviour
     {
         isInBoat = true;
         isPlayerNearby = false;
+
+        // Hide enter prompt and show exit prompt
+        if (enterPromptUI) enterPromptUI.SetActive(false);
+        if (exitPromptUI) exitPromptUI.SetActive(true);
 
         // Disable player controls
         if (playerMouse) playerMouse.enabled = false;
@@ -103,11 +133,11 @@ public class BoatEntry : MonoBehaviour
             rb.useGravity = false;
         }
 
-        // Hide player
+        // Hide player model
         foreach (var col in playerColliders) col.enabled = false;
         foreach (var rend in playerRenderers) rend.enabled = false;
 
-        // Parent player to boat and enable boat controls
+        // Parent to boat and enable boat controls
         player.transform.SetParent(boat.transform);
         if (waterBoat) waterBoat.enabled = true;
 
@@ -118,14 +148,17 @@ public class BoatEntry : MonoBehaviour
     {
         isInBoat = false;
 
-        // Unparent player and position atop boat
+        // Hide exit prompt
+        if (exitPromptUI) exitPromptUI.SetActive(false);
+
+        // Unparent and reposition player
         player.transform.SetParent(null);
         player.transform.position = boat.transform.position + exitOffset;
 
-        // Reset player rotation to original (upright)
+        // Reset player rotation
         player.transform.rotation = originalPlayerRotation;
 
-        // Restore camera parent and local transform
+        // Restore camera
         cameraTransform.SetParent(originalCameraParent);
         cameraTransform.localPosition = originalCameraLocalPosition;
         cameraTransform.localRotation = originalCameraLocalRotation;
@@ -141,7 +174,7 @@ public class BoatEntry : MonoBehaviour
             rb.constraints = originalConstraints;
         }
 
-        // Show player
+        // Show player model
         foreach (var col in playerColliders) col.enabled = true;
         foreach (var rend in playerRenderers) rend.enabled = true;
 
