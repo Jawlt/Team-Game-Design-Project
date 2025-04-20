@@ -11,5 +11,4 @@ public class FishData : ScriptableObject
     public int probability;
     public int fishDifficulty; //level 1, 2, 3
     public int fishCost;
-    public int baseXP;
 }
