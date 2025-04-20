@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI; // or TMPro if using TextMeshPro
 
+[RequireComponent(typeof(AudioSource))]
 public class BoatEntry : MonoBehaviour
 {
     [Header("Player Settings (Assign in Inspector)")]
@@ -12,6 +13,10 @@ public class BoatEntry : MonoBehaviour
     [Header("UI Prompts (Assign in Inspector)")]
     public GameObject enterPromptUI;        // The "Press E to enter boat" prompt
     public GameObject exitPromptUI;         // The "Press E to exit boat" prompt
+
+    [Header("Audio Settings")]
+    public AudioClip vroomClip;             // Assign your vroom.m4a clip here
+    private AudioSource audioSource;        // Source to play the vroom sound
 
     [Header("Exit Settings")]
     public Vector3 exitOffset = new Vector3(0, 2f, 0);  // Offset to place player when exiting
@@ -61,6 +66,12 @@ public class BoatEntry : MonoBehaviour
         waterBoat = boat.GetComponent<WaterBoat>();
         if (waterBoat != null)
             waterBoat.enabled = false;
+
+        // Setup audio source
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = vroomClip;
+        audioSource.loop = true; // keep looping while in boat
+        audioSource.playOnAwake = false;
     }
 
     void OnTriggerEnter(Collider other)
@@ -121,6 +132,10 @@ public class BoatEntry : MonoBehaviour
         if (enterPromptUI) enterPromptUI.SetActive(false);
         if (exitPromptUI) exitPromptUI.SetActive(true);
 
+        // Play vroom sound
+        if (audioSource && !audioSource.isPlaying)
+            audioSource.Play();
+
         // Disable player controls
         if (playerMouse) playerMouse.enabled = false;
         if (playerMovement) playerMovement.enabled = false;
@@ -150,6 +165,10 @@ public class BoatEntry : MonoBehaviour
 
         // Hide exit prompt
         if (exitPromptUI) exitPromptUI.SetActive(false);
+
+        // Stop vroom sound
+        if (audioSource && audioSource.isPlaying)
+            audioSource.Stop();
 
         // Unparent and reposition player
         player.transform.SetParent(null);

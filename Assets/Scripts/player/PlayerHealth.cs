@@ -13,13 +13,24 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField]
     private float currentHealth;
 
+    [Header("Audio Settings")]
+    public AudioClip poisonClip;             
+    private AudioSource audioSource;        // Source to play the poison sound
+
     private bool inGas = false;
     private bool isDead = false;
+    private AudioSource poisonAudio;
+
 
     void Start()
     {
         currentHealth = maxHealth;
         isDead = false;
+        // Setup audio source
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = poisonClip;
+        audioSource.loop = true; // keep looping while in gas
+        audioSource.playOnAwake = false;
     }
 
     void Update()
@@ -39,13 +50,23 @@ public class PlayerHealth : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("GasMist"))
+        {
             inGas = true;
+            // Play the looping poison sound
+            if (audioSource && !audioSource.isPlaying)
+                audioSource.Play();
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("GasMist"))
+        {
             inGas = false;
+            // Stop the sound when you leave
+            if (audioSource != null && audioSource.isPlaying)
+                audioSource.Stop();
+        }
     }
 
     private void Die()
