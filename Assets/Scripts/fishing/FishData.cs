@@ -10,4 +10,5 @@ public class FishData : ScriptableObject
     public GameObject inventoryItem;
     public int probability;
     public int fishDifficulty; //level 1, 2, 3
+    public int fishCost;
 }

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6f0325843c727b4d94083aaa9f71833, type: 3}
-  m_Name: Boat
+  m_Name: Island1Unlock
   m_EditorClassIdentifier: 
-  itemName: Boat
-  cost: 200
-  icon: {fileID: 0}
-  type: 0
+  itemName: Island 1
+  cost: 1000
+  icon: {fileID: 21300000, guid: c62a7d2d2cbae354ea91ba292125ccc1, type: 3}
+  type: 1

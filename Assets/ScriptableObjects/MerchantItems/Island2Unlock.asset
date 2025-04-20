@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2edfa600e4090a48b6a7f12dc4e8325, type: 3}
-  m_Name: Salmon
+  m_Script: {fileID: 11500000, guid: f6f0325843c727b4d94083aaa9f71833, type: 3}
+  m_Name: Island2Unlock
   m_EditorClassIdentifier: 
-  fishName: Salmon
-  inventoryItem: {fileID: 3212220105252078804, guid: 6586b3882982ea74eb245656fcec7097,
-    type: 3}
-  probability: 20
-  fishDifficulty: 1
-  fishCost: 50
+  itemName: Island 2
+  cost: 2000
+  icon: {fileID: 21300000, guid: 3a5af56c62db64a4883f4548aeec4b86, type: 3}
+  type: 1

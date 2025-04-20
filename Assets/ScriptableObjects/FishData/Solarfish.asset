@@ -17,3 +17,4 @@ MonoBehaviour:
     type: 3}
   probability: 20
   fishDifficulty: 1
+  fishCost: 50
