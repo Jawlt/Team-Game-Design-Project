@@ -16,6 +16,12 @@ public class FishingMinigame : MonoBehaviour
     float successThreshold = 100;
     float failThreshold = -100;
     float successCounter = 0;
+    private PlayerExperience playerXP;
+
+    private void Start()
+    {
+        playerXP = FindObjectOfType<PlayerExperience>();
+    }
 
     private void Update()
     {
@@ -35,7 +41,8 @@ public class FishingMinigame : MonoBehaviour
     {
         if (isOverlapping)
         {
-            successCounter += successIncrement * Time.deltaTime;
+            float multiplier = playerXP != null ? playerXP.catchSpeedMultiplier : 1f;
+            successCounter += successIncrement * multiplier * Time.deltaTime;
         }
         else
         {

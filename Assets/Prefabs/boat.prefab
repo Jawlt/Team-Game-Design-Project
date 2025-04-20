@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9109111325387293060}
   - component: {fileID: 2424854241446527783}
   - component: {fileID: 7152291332150102111}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EntryTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -181,7 +181,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 689410577930942436}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,7 +212,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7534045487597142459}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,7 +243,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1026696527472664185}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GameObject (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,7 +277,7 @@ GameObject:
   - component: {fileID: 7665550871606956112}
   - component: {fileID: 6178807253380516990}
   - component: {fileID: 4022419305171305649}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -377,7 +377,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2251169927878350938}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -410,7 +410,7 @@ GameObject:
   - component: {fileID: 6304623168475340364}
   - component: {fileID: 5769384744695319869}
   - component: {fileID: 4280811176807550922}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Boat Enter Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -544,7 +544,7 @@ GameObject:
   - component: {fileID: 7340784026681965507}
   - component: {fileID: 4402591982896987335}
   - component: {fileID: 533709299461623178}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Boat Exit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -745,10 +745,30 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -8004966292037330821, guid: 664e31d626eebe440985700367adc01d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -3925610538955351423, guid: 664e31d626eebe440985700367adc01d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -1799701531157228611, guid: 664e31d626eebe440985700367adc01d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 664e31d626eebe440985700367adc01d,
         type: 3}
       propertyPath: m_Name
       value: boat
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 664e31d626eebe440985700367adc01d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 664e31d626eebe440985700367adc01d,
         type: 3}
@@ -789,6 +809,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -876546973899608171, guid: 664e31d626eebe440985700367adc01d,
         type: 3}
+    - target: {fileID: 7948747656963546381, guid: 664e31d626eebe440985700367adc01d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

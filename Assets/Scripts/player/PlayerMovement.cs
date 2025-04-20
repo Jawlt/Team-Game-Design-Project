@@ -15,24 +15,30 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundMask;
 
     Vector3 velocity;
-
     bool isGrounded;
 
     [Header("Footsteps")]
-    private AudioSource audioSource;   // Assign your AudioSource here
-    public AudioClip footstepClip;    // Or assign in Inspector
-    public float stepInterval = 0.5f; // Seconds between steps
+    private AudioSource audioSource;
+    public AudioClip footstepClip;
+    public float stepInterval = 0.5f;
     private float stepTimer = 0f;
 
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        audioSource.clip = footstepClip;
+        if (audioSource == null)
+        {
+            Debug.LogWarning("No AudioSource found on PlayerMovement GameObject.");
+        }
+
+        if (footstepClip == null)
+        {
+            Debug.LogWarning("Footstep AudioClip not assigned.");
+        }
     }
-    // Update is called once per frame
+
     void Update()
     {
-        //reset velocity when hitting the ground
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
@@ -43,45 +49,43 @@ public class PlayerMovement : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        //right is the red Axis, foward is the blue axis
         Vector3 move = transform.right * x + transform.forward * z;
-
         controller.Move(move * speed * Time.deltaTime);
 
-        // --- Footstep Logic ---
+        // --- Footstep Sound Handling ---
         bool isMoving = move.magnitude > 0.1f;
         if (isGrounded && isMoving)
         {
             stepTimer -= Time.deltaTime;
-            if (stepTimer <= 0f)
+            if (stepTimer <= 0f && audioSource && footstepClip)
             {
-                // Raycast down to check for “Grass” tag
-                RaycastHit hit;
-                if (Physics.Raycast(groundCheck.position, Vector3.down, out hit, groundDistance + 0.1f, groundMask))
+                // Optional: Check surface tag
+                if (Physics.Raycast(groundCheck.position, Vector3.down, out RaycastHit hit, groundDistance + 0.1f, groundMask))
                 {
-                    if (hit.collider.CompareTag("Grass"))
+                    if (hit.collider.CompareTag("Grass") || hit.collider.CompareTag("Untagged"))
                     {
-                        audioSource.PlayOneShot(footstepClip);
+                        audioSource.PlayOneShot(footstepClip, 1f); // reliable
                     }
                 }
+                else
+                {
+                    audioSource.PlayOneShot(footstepClip, 1f); // fallback
+                }
+
                 stepTimer = stepInterval;
             }
         }
         else
         {
-            // reset timer when not moving or airborne
-            stepTimer = 0f;
+            stepTimer = stepInterval; // prevent instant replays on resume
         }
 
-        //jump if player is on the ground
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            //equation for jump velocity
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
         velocity.y += gravity * Time.deltaTime;
-
         controller.Move(velocity * Time.deltaTime);
     }
 }

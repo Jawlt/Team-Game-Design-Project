@@ -15,6 +15,9 @@ public class MerchantUI : MonoBehaviour
     public Transform playerCamera;
     public FishDatabase fishDatabase;
 
+    [Header("Unlockable Objects")]
+    public GameObject boatObject; // Drag your Boat GameObject here
+
     [System.Serializable]
     public class HazardBinding
     {
@@ -102,13 +105,23 @@ public class MerchantUI : MonoBehaviour
             case MerchantItem.ItemType.Boat:
                 PlayerData.Instance.hasBoat = true;
                 Debug.Log("Boat unlocked!");
+
+                if (boatObject != null)
+                {
+                    boatObject.SetActive(true);
+                    Debug.Log("Boat object activated.");
+                }
+                else
+                {
+                    Debug.LogWarning("No boatObject assigned in MerchantUI.");
+                }
                 break;
 
             case MerchantItem.ItemType.IslandUnlock:
                 PlayerData.Instance.unlockedIslands.Add(item.itemName);
                 Debug.Log(item.itemName + " unlocked!");
 
-                // 🔥 Remove the hazard associated with this island
+                // Remove the hazard associated with this island
                 GameObject hazard = GetHazardForItem(item.itemName);
                 if (hazard != null)
                 {
@@ -125,51 +138,6 @@ public class MerchantUI : MonoBehaviour
         // Hide the button after successful purchase
         buttonObj.SetActive(false);
     }
-
-
-
-    public void Buy(MerchantItem item)
-    {
-        // Prevent rebuying
-        switch (item.type)
-        {
-            case MerchantItem.ItemType.Boat:
-                if (PlayerData.Instance.hasBoat)
-                {
-                    Debug.Log("You already own a boat.");
-                    return;
-                }
-                break;
-            case MerchantItem.ItemType.IslandUnlock:
-                if (PlayerData.Instance.unlockedIslands.Contains(item.itemName))
-                {
-                    Debug.Log($"Island '{item.itemName}' is already unlocked.");
-                    return;
-                }
-                break;
-        }
-
-        if (!PlayerData.Instance.CanAfford(item.cost))
-        {
-            Debug.Log("Not enough cash.");
-            return;
-        }
-
-        PlayerData.Instance.SpendCash(item.cost);
-
-        switch (item.type)
-        {
-            case MerchantItem.ItemType.Boat:
-                PlayerData.Instance.hasBoat = true;
-                Debug.Log("Boat unlocked!");
-                break;
-            case MerchantItem.ItemType.IslandUnlock:
-                PlayerData.Instance.unlockedIslands.Add(item.itemName);
-                Debug.Log(item.itemName + " unlocked!");
-                break;
-        }
-    }
-
 
     public void SellAll()
     {

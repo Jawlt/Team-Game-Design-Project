@@ -5,22 +5,26 @@ using UnityEngine;
 
 public enum Watersource
 {
-    Lake, River, Ocean, island1, island2, island3
+    island1, island2, island3
 }
+
 public class FishingSystem : MonoBehaviour
 {
     public static FishingSystem Instance { get; set; }
+
     [SerializeField] private GameObject fishingRodPrefab;
     [SerializeField] private Transform toolHolder;
     private GameObject currentRodInstance;
-    public List<FishData> lakeFishList;
-    public List<FishData> riverFishList;
-    public List<FishData> oceanFishList;
+
+    public List<FishData> island1FishList;
+    public List<FishData> island2FishList;
+    public List<FishData> island3FishList;
 
     public bool isThereABite;
     bool hasPulled;
 
     public static event Action OnEndFishing;
+
     public GameObject minigame;
     FishData fishType;
     public FishMovement fishMovement;
@@ -54,6 +58,7 @@ public class FishingSystem : MonoBehaviour
     {
         StartCoroutine(FishingCoroutine(watersource));
     }
+
     IEnumerator FishingCoroutine(Watersource watersource)
     {
         yield return new WaitForSeconds(3f);
@@ -63,7 +68,6 @@ public class FishingSystem : MonoBehaviour
         if (fish.fishName == "NoBite")
         {
             Debug.LogWarning("No Fish Caught");
-
             EndFishing();
         }
         else
@@ -77,7 +81,6 @@ public class FishingSystem : MonoBehaviour
     {
         isThereABite = true;
 
-        // waits till player has pulled rod
         while (!hasPulled)
         {
             yield return null;
@@ -107,12 +110,12 @@ public class FishingSystem : MonoBehaviour
 
         OnEndFishing?.Invoke();
 
-        // Destroy current rod if it exists
         if (currentRodInstance != null)
         {
             Destroy(currentRodInstance);
             Debug.Log("Old fishing rod destroyed.");
         }
+
         currentRodInstance = Instantiate(fishingRodPrefab, toolHolder);
     }
 
@@ -127,33 +130,29 @@ public class FishingSystem : MonoBehaviour
         Debug.Log("Fishing rod equipped.");
     }
 
-
     private FishData CalculateBite(Watersource watersource)
     {
         List<FishData> availableFish = GetAvailableFish(watersource);
 
-        // Calculate total probability
         float totalProbability = 0f;
         foreach (FishData fish in availableFish)
         {
             totalProbability += fish.probability;
         }
 
-        // Generate random number between 0 and total probability
         int randomValue = UnityEngine.Random.Range(0, Mathf.FloorToInt(totalProbability) + 1);
         Debug.Log("Random value generated: " + randomValue);
 
-        // Loop through the fish and check if the random number falls into their probability
         float cumulativeProbability = 0f;
         foreach (FishData fish in availableFish)
         {
             cumulativeProbability += fish.probability;
             if (randomValue <= cumulativeProbability)
             {
-                // This fish is biting
                 return fish;
             }
         }
+
         return null; // shouldn't happen
     }
 
@@ -161,14 +160,15 @@ public class FishingSystem : MonoBehaviour
     {
         switch (watersource)
         {
-            case Watersource.Lake:
-                return lakeFishList;
-            case Watersource.River:
-                return riverFishList;
-            case Watersource.Ocean:
-                return oceanFishList;
+            case Watersource.island1:
+                return island1FishList;
+            case Watersource.island2:
+                return island2FishList;
+            case Watersource.island3:
+                return island3FishList;
             default:
-                return new List<FishData>(); // safer than returning null
+                Debug.LogWarning("Invalid water source.");
+                return new List<FishData>();
         }
     }
 
@@ -181,13 +181,11 @@ public class FishingSystem : MonoBehaviour
             InventorySystem.Instance.AddToInventory(fishType.fishName);
             Debug.Log("Fish Caught");
 
-            // Award XP and Bonus Cash
             PlayerExperience playerXP = FindObjectOfType<PlayerExperience>();
             if (playerXP != null)
             {
                 playerXP.GainXP(fishType.baseXP);
 
-                // Optional: Add bonus cash directly here
                 if (playerXP.cashBonusPerCatch > 0)
                 {
                     PlayerData.Instance.AddCash(playerXP.cashBonusPerCatch);
@@ -201,7 +199,6 @@ public class FishingSystem : MonoBehaviour
         {
             Debug.Log("Fish Escaped");
             EndFishing();
-
         }
     }
 }
