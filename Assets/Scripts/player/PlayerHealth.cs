@@ -26,6 +26,7 @@ public class PlayerHealth : MonoBehaviour
 
     private bool inGas = false;
     private bool isDead = false;
+    private bool inPoisonWater = false;
 
     void Start()
     {
@@ -33,19 +34,37 @@ public class PlayerHealth : MonoBehaviour
         isDead = false;
 
         audioSource = GetComponent<AudioSource>();
-        if (audioSource != null)
-        {
-            audioSource.clip = poisonClip;
-            audioSource.loop = true;
-            audioSource.playOnAwake = false;
-        }
     }
 
     void Update()
     {
-        bool inPoisonWater = Physics.CheckSphere(waterCheck.position, checkRadius, poisonWaterLayer);
+        inPoisonWater = Physics.CheckSphere(waterCheck.position, checkRadius, poisonWaterLayer);
 
-        if ((inGas || inPoisonWater) && !isDead)
+        bool isInPoison = (inGas || inPoisonWater);
+
+        // Handle poison audio loop
+        if (isInPoison && poisonClip != null && !isDead)
+        {
+            if (!audioSource.isPlaying || audioSource.clip != poisonClip)
+            {
+                audioSource.clip = poisonClip;
+                audioSource.loop = true;
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            // Stop poison clip only if it's the currently playing one
+            if (audioSource != null && audioSource.clip == poisonClip && audioSource.isPlaying)
+            {
+                audioSource.Stop();
+                audioSource.clip = null;
+                audioSource.loop = false;
+            }
+        }
+
+        // Apply damage
+        if (isInPoison && !isDead)
         {
             float totalDPS = 0f;
             if (inGas) totalDPS += gasDamagePerSecond;
@@ -58,15 +77,6 @@ public class PlayerHealth : MonoBehaviour
             {
                 Die();
             }
-
-            // Play poison loop sound
-            if (audioSource && poisonClip && !audioSource.isPlaying)
-                audioSource.Play();
-        }
-        else
-        {
-            if (audioSource && audioSource.isPlaying)
-                audioSource.Stop();
         }
     }
 
@@ -75,8 +85,6 @@ public class PlayerHealth : MonoBehaviour
         if (other.CompareTag("GasMist"))
         {
             inGas = true;
-            if (audioSource && poisonClip && !audioSource.isPlaying)
-                audioSource.Play();
         }
     }
 
@@ -94,12 +102,19 @@ public class PlayerHealth : MonoBehaviour
         isDead = true;
         inGas = false;
 
-        if (audioSource && audioSource.isPlaying)
+        // Stop poison loop if it was playing
+        if (audioSource != null && audioSource.clip == poisonClip && audioSource.isPlaying)
+        {
             audioSource.Stop();
+            audioSource.clip = null;
+            audioSource.loop = false;
+        }
 
-        if (deathClip != null)
+        // Play death OneShot
+        if (audioSource && deathClip)
             audioSource.PlayOneShot(deathClip);
 
+        // Respawn logic
         if (spawnPoint != null)
         {
             Debug.Log("Spawn point found at position: " + spawnPoint.position);

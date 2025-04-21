@@ -425,7 +425,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   waterCheck: {fileID: 373937269}
-  checkRadius: 0.1
+  checkRadius: 0.4
   currentHealth: 0
 --- !u!4 &75565830 stripped
 Transform:
